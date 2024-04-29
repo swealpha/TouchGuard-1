@@ -30,3 +30,95 @@ The above launches TouchGuard with a time interval of 200 ms (disables the touch
 ## Support
 Questions? Comments? Feedback? Issues? Open a new issue [here](https://github.com/thesyntaxinator/TouchGuard/issues) or email syntaxsoftsupport@icloud.com.
 
+
+
+
+________________________________________________
+Here is a guide on how to autostart touchguard.
+
+Guide on how we got it up and running on Mac M3 Sonoma 14.4.1
+
+________________________________________________
+1.
+Put both files “runtouchguard” and “touchguard” in the “Users/admin/” folder.
+(NOTE! Admin is my username on the macOS account)
+________________________________________________
+
+(NOTE! ""runtouchguard" should contain this below and have no extension.)
+
+#!/bin/sh
+
+PATH_TO_THIS_DIR="$(dirname $(realpath $0))"
+
+sudo "$PATH_TO_THIS_DIR/touchguard" -time 0.5
+
+________________________________________________
+2.
+Open terminal when you are in the same folder as both files.
+i.e. "User/admin/"
+
+Make both files executable by typing this in the terminal separately.
+The icons of the files in the folder change to Unix executables.
+
+chmod +x runtouchguard
+
+chmod +x touchguard
+
+________________________________________________
+
+Open terminal and run “sudo visudo”
+Navigate down with the arrow keys until you find these 3 lines:
+
+#root and users in group wheel can run anything on any machine as any user
+
+root   ALL = (ALL) ALL
+
+%admin ALL = (ALL) ALL
+
+stand on the empty line below the line starting with '%admin' and
+press the letter "i" (which is an insert function in terminal).
+Then add this line:
+
+admin ALL = NOPASSWD: /Users/admin/touchguard
+
+
+Should look like this:
+
+#root and users in group wheel can run anything on any machine as any user
+
+root   ALL = (ALL) ALL
+
+%admin ALL = (ALL) ALL
+
+admin  ALL = NOPASSWD: /Users/admin/touchguard
+
+
+Then save by pressing ESC,W,ESC,Q. Get it confirmed with "written".
+________________________________________________
+
+4.
+Now go to the folder "Users/admin/" and run the file runtouchguard with You will probably have to allow to bypass the script with the MacOS system settings "privacy and security". Now it should work!
+
+________________________________________________
+
+5.
+To add "runtouchguard" to start automatically with macOS:
+
+Open System Preferences -> General -> Startup Items.
+
+Press the plus sign "+" and select the file "runtouchguard".
+
+Restart and test that everything works with autostart and touchguard!
+
+________________________________________________
+
+Extra:
+You can experiment with how many milliseconds the touch should be off after pressing the keyboard.
+
+For that, change "-time 0.5" to e.g. "-time 0.3" in the file "runtouchguard".
+
+#!/bin/sh
+
+PATH_TO_THIS_DIR="$(dirname $(realpath $0))"
+
+sudo "$PATH_TO_THIS_DIR/touchguard" -time 0.5
